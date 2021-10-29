@@ -75,3 +75,95 @@ Serial.print(moisture);
 Serial.println("%");
 lcd.setCursor(0,1);
 }
+void checkWaterLevel(){
+
+while(digitalRead(floatSwitch) == HIGH){
+tone(buzzerPin,1000,500);
+digitalWrite(ledBlue,LOW);
+digitalWrite(ledRed,HIGH);
+lcd.setCursor(0,1);
+lcd.print("WATER LOW!");
+delay(1000);
+tone(buzzerPin,1000,500);
+delay(1000);
+}
+noTone(buzzerPin);
+digitalWrite(ledBlue,HIGH);
+digitalWrite(ledRed,LOW);
+digitalWrite(buzzerPin,LOW);
+lcd.setCursor(0,1);
+lcd.print(emptyLine);
+}
+void pumpWater(){
+digitalWrite(motorHigh,HIGH);
+delay(3000);
+digitalWrite(motorHigh,LOW);
+delay(2000);
+}
+void printDrySoil(){
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print("DRY SOIL");
+lcd.setCursor(10,0);
+lcd.print(moisture);
+lcd.setCursor(12,0);
+lcd.print("%");
+lcd.setCursor(0,1);
+lcd.print("PUMP : ON"); 
+}
+void printSiltSoil(){
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print("SILT SOIL");
+lcd.setCursor(11,0);
+lcd.print(moisture);
+lcd.setCursor(13,0);
+lcd.print("%");
+lcd.setCursor(0,1);
+lcd.print("PUMP : OFF");
+digitalWrite(ledBlue,LOW);
+delay(2000);
+}
+void printWetSoil(){
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print("WET SOIL");
+lcd.setCursor(10,0);
+lcd.print(moisture);
+lcd.setCursor(12,0);
+lcd.print("%");
+lcd.setCursor(0,1);
+lcd.print("PUMP : OFF");
+digitalWrite(ledBlue,LOW);
+delay(2000);
+}
+void loop(){
+checkWaterLevel();
+readMoisture();
+while(moisture < 25){ 
+do{
+checkWaterLevel();
+printDrySoil();
+pumpWater();
+readMoisture();
+if(moisture > 25 && moisture <55){
+flag = 1;
+printSiltSoil();
+}
+if(moisture > 55){
+flag = 1;
+printWetSoil();
+}
+}while(!flag);
+}
+while(moisture > 25 && moisture < 55){
+checkWaterLevel();
+printSiltSoil();
+readMoisture();
+}
+while(moisture > 55){
+checkWaterLevel();
+printWetSoil();
+readMoisture();
+}
+}
