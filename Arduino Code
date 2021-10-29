@@ -1,0 +1,77 @@
+#include <LiquidCrystal.h> 
+#define MOISTURE_SENSOR A0 
+const int RS = 13, EN = 12, D4 = 11 ,D5 = 10, D6 = 
+9, D7 = 8;
+const int ledRed = 5; 
+const int ledBlue = 4; 
+const int motorHigh = 6; 
+const int motorLow = 7; 
+const int floatSwitch = 3;
+const int buzzerPin = 2;
+int moisture;
+int flag = 0;
+String emptyLine = " ";
+LiquidCrystal lcd(RS,EN,D4,D5,D6,D7);
+void setup(){
+Serial.begin(9600);
+lcd.begin(16,2);
+lcd.setCursor(0,0);
+lcd.print("A");
+delay(200);
+lcd.setCursor(1,0);
+lcd.print("U");
+delay(200);
+lcd.setCursor(2,0);
+lcd.print("T");
+delay(200);
+lcd.setCursor(3,0);
+lcd.print("O");
+delay(200);
+lcd.setCursor(4,0);
+lcd.print(" ");
+delay(200);
+lcd.setCursor(5,0);
+lcd.print("I");
+delay(200);
+lcd.setCursor(6,0);
+lcd.print("R");
+delay(200);
+lcd.setCursor(7,0);
+lcd.print("R");
+delay(200);
+lcd.setCursor(8,0);
+lcd.print("I");
+delay(200);
+lcd.setCursor(9,0);
+lcd.print("G");
+delay(200);
+lcd.setCursor(10,0);
+lcd.print("A");
+delay(200);
+lcd.setCursor(11,0);
+lcd.print("T");
+delay(200);
+lcd.setCursor(12,0);
+lcd.print("I");
+delay(200);
+lcd.setCursor(13,0);
+lcd.print("O");
+delay(200);
+lcd.setCursor(14,0);
+lcd.print("N");
+delay(3000);
+lcd.clear();
+pinMode(ledRed,OUTPUT);
+pinMode(ledBlue,OUTPUT);
+pinMode(motorHigh,OUTPUT); 
+pinMode(floatSwitch,INPUT_PULLUP);
+pinMode(MOISTURE_SENSOR,INPUT_PULLUP);
+}
+void readMoisture(){
+moisture = analogRead(MOISTURE_SENSOR);
+moisture = map(moisture,0,1023,100,0);
+Serial.print("Moisture content = ");
+Serial.print(moisture);
+Serial.println("%");
+lcd.setCursor(0,1);
+}
